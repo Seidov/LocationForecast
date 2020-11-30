@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/currentLocationFragment"
-        android:name="com.sultanseidov.locationforecast.CurrentLocationFragment"
+        android:name="com.sultanseidov.locationforecast.view.fragment.CurrentLocationFragment"
         android:label="fragment_blank"
         tools:layout="@layout/fragment_current_location" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/autoCompleteSearchFragment"
-        android:name="com.sultanseidov.locationforecast.AutoCompleteSearchFragment"
+        android:name="com.sultanseidov.locationforecast.view.fragment.AutoCompleteSearchFragment"
         android:label="fragment_blank2"
         tools:layout="@layout/fragment_auto_complete_search" />
 </navigation>

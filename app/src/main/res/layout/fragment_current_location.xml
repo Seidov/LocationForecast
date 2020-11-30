@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CurrentLocationFragment">
+    tools:context=".view.fragment.CurrentLocationFragment">
 
     <TextView
         android:layout_gravity="center_horizontal|center_vertical"
