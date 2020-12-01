@@ -13,8 +13,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceClient {
     public static String BASE_URL = "http://dataservice.accuweather.com/";
-    public static String APIKEY="V7vxIQiXA6gpoB7PIJrcpmpSpTwrcOIR";
-    //public static String APIKEY="my38hJVxUYKPMQUM4J8LSdPAxOZaWxuF";
+    //public static String APIKEY="V7vxIQiXA6gpoB7PIJrcpmpSpTwrcOIR";
+    public static String APIKEY="my38hJVxUYKPMQUM4J8LSdPAxOZaWxuF";
 
 
     private static ServiceClient instance;

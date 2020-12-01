@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -14,11 +15,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,17 +32,32 @@ import com.sultanseidov.locationforecast.Util.Utils;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResDayOfDailyForecastsModel;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResGeopositionSearchModel;
 import com.sultanseidov.locationforecast.view.activity.MainActivity;
+import com.sultanseidov.locationforecast.view.adapter.FiveDaysofDailyForecastsAdapter;
 import com.sultanseidov.locationforecast.viewModel.CurrentLocationViewModel;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class CurrentLocationFragment extends Fragment {
 
     public static String TAG = CurrentLocationFragment.class.getSimpleName();
     public static LocationManager locationManager;
     public static Location myLocation;
+    ResGeopositionSearchModel geopositionSearchModel;
     static View view;
-    TextView textGotoSecondScreen;
+
+    TextView textCurrentTemperature;
+    TextView textCurrentDay;
+    TextView textCurrentLocation;
+
+    ImageView imageCurrentDay;
+    RecyclerView rvNextDays;
+
+    LinearLayout linearSearchLayout;
     String stringDefaultCityKey="318251";
     CurrentLocationViewModel viewModel;
+    FiveDaysofDailyForecastsAdapter adapter = new FiveDaysofDailyForecastsAdapter(new ArrayList<>());
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +73,7 @@ public class CurrentLocationFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_current_location, container, false);
         initUIComponent();
+        initNextDaysRecyclerView();
         if (isGrantPermissions()) {
             viewModel.refreshGeopositionSearchModelData(getCurrentLocationAndRequestApi());
             observerGeopositionSearchViewModel();
@@ -62,14 +83,24 @@ public class CurrentLocationFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        linearSearchLayout.setOnClickListener(view1 -> {
+
+        });
+
+    }
+
     private void observerGeopositionSearchViewModel() {
         viewModel.geopositionSearchModelMutableLiveData.observe(getActivity(), (ResGeopositionSearchModel resGeopositionSearchModel) -> {
 
             if (resGeopositionSearchModel != null) {
+                geopositionSearchModel=resGeopositionSearchModel;
                 viewModel.refreshDayOfDailyForecastsModelData(resGeopositionSearchModel.getKey());
                 observerDayOfDailyForecastsViewModel();
 
-                textGotoSecondScreen.setText(resGeopositionSearchModel.getKey().toString());
 
             } else {
                 Log.i(TAG, "resGeopositionSearchModel.getKey() null");
@@ -96,6 +127,16 @@ public class CurrentLocationFragment extends Fragment {
 
             if (resDayOfDailyForecastsModel != null) {
 
+                textCurrentDay.setText(Utils.getDateNameByEpochDate(resDayOfDailyForecastsModel.getDailyForecasts().get(0).getEpochDate()));
+                textCurrentLocation.setText(geopositionSearchModel.getLocalizedName()+"\n"+geopositionSearchModel.getAdministrativeArea().getLocalizedName()+", "+geopositionSearchModel.getCountry().getCountryLocalizedName());
+                textCurrentTemperature.setText(Utils.getCelsiusByFahrenheit(resDayOfDailyForecastsModel.getDailyForecasts().get(0).getTemperature().getMinimum().getValue(),resDayOfDailyForecastsModel.getDailyForecasts().get(0).getTemperature().getMaximum().getValue())+"°");
+
+                imageCurrentDay.setImageResource(Utils.getWeatherImageByIconId(resDayOfDailyForecastsModel.getDailyForecasts().get(0).getDay().getIcon()));
+                observerNextDays(resDayOfDailyForecastsModel);
+
+
+                //textGotoSecondScreen.setText(Utils.getDate(Long.valueOf(resDayOfDailyForecastsModel.getDailyForecasts().get(0).getEpochDate())));
+
 
                 Toast.makeText(getContext(), "notnull", Toast.LENGTH_SHORT).show();
 
@@ -119,6 +160,15 @@ public class CurrentLocationFragment extends Fragment {
 
             }
         });
+    }
+
+    private void observerNextDays(ResDayOfDailyForecastsModel resDayOfDailyForecastsModel) {
+        adapter.updateFiveDaysofDailyForecastsAdapter(resDayOfDailyForecastsModel.getDailyForecasts());
+    }
+
+    private void initNextDaysRecyclerView() {
+        rvNextDays.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL, false));
+        rvNextDays.setAdapter(adapter);
     }
 
     public static String getCurrentLocationAndRequestApi() {
@@ -148,22 +198,18 @@ public class CurrentLocationFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
-        textGotoSecondScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isGrantPermissions();
-
-                //Navigation.findNavController(view).navigate(R.id.action_blankFragment_to_blankFragment2);
-            }
-        });
-
-    }
 
     private void initUIComponent() {
-        textGotoSecondScreen=view.findViewById(R.id.textGotoSecondScreen);
+
+         textCurrentTemperature=view.findViewById(R.id.textCurrentTemperature);
+         textCurrentDay=view.findViewById(R.id.textCurrentDay);
+         textCurrentLocation=view.findViewById(R.id.textCurrentLocation);
+
+        imageCurrentDay=view.findViewById(R.id.imageCurrentDay);
+        rvNextDays=view.findViewById(R.id.rvNextDays);
+
+        linearSearchLayout=view.findViewById(R.id.linearSearchLayout);
+
     }
 }

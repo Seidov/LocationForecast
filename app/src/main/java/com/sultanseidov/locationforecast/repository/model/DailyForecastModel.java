@@ -13,7 +13,7 @@ public class DailyForecastModel {
 
     @SerializedName("EpochDate")
     @Expose
-    private Integer epochDate;
+    private int epochDate;
 
     @SerializedName("Temperature")
     @Expose
@@ -43,7 +43,7 @@ public class DailyForecastModel {
         return date;
     }
 
-    public Integer getEpochDate() {
+    public int getEpochDate() {
         return epochDate;
     }
 

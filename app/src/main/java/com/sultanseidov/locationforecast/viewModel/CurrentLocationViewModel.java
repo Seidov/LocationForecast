@@ -70,7 +70,7 @@ public class CurrentLocationViewModel  extends ViewModel {
         private void fetchDayOfDailyForecastsModelData(String urlCityKey) {
             dayOfDailyForecastsMutableLiveDataLoading.setValue(true);
             String url;
-            url="forecasts/v1/daily/1day/"+urlCityKey+"";
+            url="forecasts/v1/daily/5day/"+urlCityKey+"";
             disposable.add(
                     service.getDayOfDailyForecasts(url,ServiceClient.APIKEY,"en",false,false)
                             .subscribeOn(Schedulers.newThread())

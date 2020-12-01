@@ -7,7 +7,7 @@ public class MinimumModel {
 
     @SerializedName("Value")
     @Expose
-    private Integer value;
+    private int value;
 
     @SerializedName("Unit")
     @Expose
@@ -17,7 +17,7 @@ public class MinimumModel {
     @Expose
     private Integer unitType;
 
-    public Integer getValue() {
+    public int getValue() {
         return value;
     }
 
