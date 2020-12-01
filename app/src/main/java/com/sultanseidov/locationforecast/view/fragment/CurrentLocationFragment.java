@@ -87,8 +87,8 @@ public class CurrentLocationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        linearSearchLayout.setOnClickListener(view1 -> {
-
+        linearSearchLayout.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_blankFragment_to_blankFragment2);
         });
 
     }
