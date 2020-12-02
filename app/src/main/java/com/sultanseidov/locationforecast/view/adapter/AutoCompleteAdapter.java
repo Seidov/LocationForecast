@@ -1,6 +1,7 @@
 package com.sultanseidov.locationforecast.view.adapter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sultanseidov.locationforecast.R;
@@ -52,10 +54,11 @@ public class AutoCompleteAdapter  extends RecyclerView.Adapter<AutoCompleteAdapt
             //holder.itemView.getContext().startActivity(intent);
 
 
+            Bundle bundle=new Bundle();
+            bundle.putString("cityKey",autoCompleteSerachModelList.get(position).getKey());
+            Navigation.findNavController(view).navigate(R.id.action_autoCompleteSearchFragment_to_detailForecastFragment,bundle);
+
         });
-
-
-
     }
 
     @Override

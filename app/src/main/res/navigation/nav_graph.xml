@@ -18,5 +18,14 @@
         android:id="@+id/autoCompleteSearchFragment"
         android:name="com.sultanseidov.locationforecast.view.fragment.AutoCompleteSearchFragment"
         android:label="fragment_blank2"
-        tools:layout="@layout/fragment_auto_complete_search" />
+        tools:layout="@layout/fragment_auto_complete_search" >
+        <action
+            android:id="@+id/action_autoCompleteSearchFragment_to_detailForecastFragment"
+            app:destination="@id/detailForecastFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailForecastFragment"
+        android:name="com.sultanseidov.locationforecast.view.fragment.DetailForecastFragment"
+        android:label="fragment_detail_forecast"
+        tools:layout="@layout/fragment_detail_forecast" />
 </navigation>

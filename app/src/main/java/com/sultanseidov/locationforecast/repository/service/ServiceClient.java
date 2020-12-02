@@ -3,6 +3,7 @@ package com.sultanseidov.locationforecast.repository.service;
 import com.sultanseidov.locationforecast.repository.model.AutoCompleteSerachModel;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResDayOfDailyForecastsModel;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResGeopositionSearchModel;
+import com.sultanseidov.locationforecast.repository.service.responseModel.ResSearchByLocationKeyModel;
 
 import java.util.List;
 
@@ -14,7 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceClient {
     public static String BASE_URL = "http://dataservice.accuweather.com/";
     //public static String APIKEY="V7vxIQiXA6gpoB7PIJrcpmpSpTwrcOIR";
-    public static String APIKEY="my38hJVxUYKPMQUM4J8LSdPAxOZaWxuF";
+    //public static String APIKEY="my38hJVxUYKPMQUM4J8LSdPAxOZaWxuF";
+    public static String APIKEY="s3tO5VV8SiGCfrnS7lJ0WuYh4Vp90FB4";
+
 
 
     private static ServiceClient instance;
@@ -47,5 +50,9 @@ public class ServiceClient {
 
     public Single<List<AutoCompleteSerachModel>> getAutocompleteSearch(String apikey, String q, String language) {
         return api.getAutocompleteSearch(apikey,q, language);
+    }
+
+    public Single<ResSearchByLocationKeyModel> getSearchByLocationKey(String urlCityKey, String apikey, String language) {
+        return api.getSearchByLocationKey(urlCityKey,apikey, language);
     }
 }

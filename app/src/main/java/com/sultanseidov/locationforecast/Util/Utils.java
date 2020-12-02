@@ -23,7 +23,6 @@ public class Utils {
             "android.permission.ACCESS_BACKGROUND_LOCATION"};
 
 
-
     public static boolean isGrantLocationPermissions(Activity activity, String[] permissionRequestList, int permissionRequestCode) {
         boolean isPermitGrant = false;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
@@ -48,7 +47,6 @@ public class Utils {
     }
 
 
-
     public static String getDayNameByEpochDate(int l) {
         Date date = new Date(Long.valueOf(l) * 1000);
         DateFormat format = new SimpleDateFormat("EEEE");
@@ -71,9 +69,23 @@ public class Utils {
 
     }
 
+    public static boolean isDay(int l) {
 
-    public static String getCelsiusByFahrenheit(Integer minFahrenheit,Integer maxFahrenheit) {
-        Integer fahrenheit=(minFahrenheit+maxFahrenheit)/2;
+        boolean isDay = false;
+        Date date = new Date(Long.valueOf(l) * 1000);
+        DateFormat df6 = new SimpleDateFormat("HH");
+        String formatted = df6.format(date);
+        int hh = Integer.valueOf(formatted);
+        if (hh >= 6 && hh <= 18) {
+            isDay = true;
+        }
+        return isDay;
+
+    }
+
+
+    public static String getCelsiusByFahrenheit(Integer minFahrenheit, Integer maxFahrenheit) {
+        Integer fahrenheit = (minFahrenheit + maxFahrenheit) / 2;
         return "" + ((fahrenheit - 32) * 5 / 9);
     }
 
@@ -245,6 +257,17 @@ public class Utils {
 
         }
         return categoryIconId;
+    }
+
+    public static int getImageByDayOrNight(boolean isDay) {
+
+        int imageResource;
+        if (isDay) {
+            imageResource = R.drawable.day;
+        } else {
+            imageResource = R.drawable.night;
+        }
+        return imageResource;
     }
 
 

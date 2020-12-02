@@ -3,6 +3,7 @@ package com.sultanseidov.locationforecast.repository.service;
 import com.sultanseidov.locationforecast.repository.model.AutoCompleteSerachModel;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResDayOfDailyForecastsModel;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResGeopositionSearchModel;
+import com.sultanseidov.locationforecast.repository.service.responseModel.ResSearchByLocationKeyModel;
 
 import java.util.List;
 
@@ -31,6 +32,14 @@ public interface IApi {
                                                                @Query("language")String language,
                                                                @Query("details")boolean details,
                                                                @Query("metric")boolean metric);
+
+
+    //Search by locationKey
+    @GET()
+    Single<ResSearchByLocationKeyModel> getSearchByLocationKey(@Url String cityKey,
+                                                               @Query("apikey") String apikey,
+                                                               @Query("language")String language);
+
 
 
 

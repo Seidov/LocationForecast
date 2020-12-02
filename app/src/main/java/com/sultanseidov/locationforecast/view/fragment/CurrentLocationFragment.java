@@ -1,12 +1,10 @@
 package com.sultanseidov.locationforecast.view.fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -31,11 +29,8 @@ import com.sultanseidov.locationforecast.R;
 import com.sultanseidov.locationforecast.Util.Utils;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResDayOfDailyForecastsModel;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResGeopositionSearchModel;
-import com.sultanseidov.locationforecast.view.activity.MainActivity;
 import com.sultanseidov.locationforecast.view.adapter.FiveDaysofDailyForecastsAdapter;
-import com.sultanseidov.locationforecast.viewModel.CurrentLocationViewModel;
-
-import org.w3c.dom.Text;
+import com.sultanseidov.locationforecast.viewModel.LocationForecastViewModel;
 
 import java.util.ArrayList;
 
@@ -56,14 +51,14 @@ public class CurrentLocationFragment extends Fragment {
 
     LinearLayout linearSearchLayout;
     String stringDefaultCityKey="318251";
-    CurrentLocationViewModel viewModel;
+    LocationForecastViewModel viewModel;
     FiveDaysofDailyForecastsAdapter adapter = new FiveDaysofDailyForecastsAdapter(new ArrayList<>());
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
-        viewModel = ViewModelProviders.of(getActivity()).get(CurrentLocationViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(LocationForecastViewModel.class);
 
 
     }
