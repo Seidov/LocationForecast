@@ -16,22 +16,23 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class AutocompleteSearchViewModel extends ViewModel {
-    CompositeDisposable disposable = new CompositeDisposable();
-
-    ServiceClient service = ServiceClient.getInstance();
 
     //AutocompleteSearch
     public MutableLiveData<List<AutoCompleteSerachModel>> resAutocompleteSearchModelMutableLiveData = new MutableLiveData<List<AutoCompleteSerachModel>>();
     public MutableLiveData<Boolean> resAutocompleteSearchModelMutableLiveDataLoadError = new MutableLiveData<Boolean>();
     public MutableLiveData<Boolean> resAutocompleteSearchModelMutableLiveDataLoading = new MutableLiveData<Boolean>();
 
+    CompositeDisposable disposable = new CompositeDisposable();
+    ServiceClient service = ServiceClient.getInstance();
+
     public void refreshAutocompleteSearchModelData(String q) {
-        fetchAutocompleteSearchModelData(q);}
+        fetchAutocompleteSearchModelData(q);
+    }
 
     private void fetchAutocompleteSearchModelData(String q) {
         resAutocompleteSearchModelMutableLiveDataLoading.setValue(true);
         disposable.add(
-                service.getAutocompleteSearch(ServiceClient.APIKEY,q,"en")
+                service.getAutocompleteSearch(ServiceClient.APIKEY, q, "en")
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeWith(new DisposableSingleObserver<List<AutoCompleteSerachModel>>() {
@@ -39,7 +40,7 @@ public class AutocompleteSearchViewModel extends ViewModel {
                             @Override
                             public void onSuccess(List<AutoCompleteSerachModel> objectList) {
 
-                                if (objectList!=null){
+                                if (objectList != null) {
                                     resAutocompleteSearchModelMutableLiveData.setValue(objectList);
                                     resAutocompleteSearchModelMutableLiveDataLoadError.setValue(false);
                                     resAutocompleteSearchModelMutableLiveDataLoading.setValue(false);
@@ -53,7 +54,7 @@ public class AutocompleteSearchViewModel extends ViewModel {
                                 resAutocompleteSearchModelMutableLiveDataLoadError.setValue(true);
                                 resAutocompleteSearchModelMutableLiveDataLoading.setValue(false);
                                 //e.printStackTrace();
-                                Log.e("AutocompleteSearchModel", e.getSuppressed().toString(),e);
+                                Log.e("AutocompleteSearchModel", e.getSuppressed().toString(), e);
                                 //Log.e("sultan", e.getMessage());
                                 //Log.e("sultan", e.getLocalizedMessage());
                             }

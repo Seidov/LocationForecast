@@ -1,8 +1,14 @@
 package com.sultanseidov.locationforecast.viewModel;
 
+import android.app.Application;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.sultanseidov.locationforecast.repository.model.LoadErrorTypeModel;
 import com.sultanseidov.locationforecast.repository.service.ServiceClient;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResDayOfDailyForecastsModel;
 import com.sultanseidov.locationforecast.repository.service.responseModel.ResGeopositionSearchModel;
@@ -13,24 +19,30 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class LocationForecastViewModel extends ViewModel {
-
-    //geopositionSearch
-    public MutableLiveData<ResGeopositionSearchModel> geopositionSearchModelMutableLiveData = new MutableLiveData<ResGeopositionSearchModel>();
-    public MutableLiveData<Boolean> geopositionSearchModelMutableLiveDataLoadError = new MutableLiveData<Boolean>();
-    public MutableLiveData<Boolean> geopositionSearchModelMutableLiveDataDataLoading = new MutableLiveData<Boolean>();
-    //dayOfDailyForecasts
-    public MutableLiveData<ResDayOfDailyForecastsModel> dayOfDailyForecastsMutableLiveData = new MutableLiveData<ResDayOfDailyForecastsModel>();
-    public MutableLiveData<Boolean> dayOfDailyForecastsMutableLiveDataLoadError = new MutableLiveData<Boolean>();
-    public MutableLiveData<Boolean> dayOfDailyForecastsMutableLiveDataLoading = new MutableLiveData<Boolean>();
-
-    //geopositionSearch
-    public MutableLiveData<ResSearchByLocationKeyModel> searchByLocationKeyModelMutableLiveData = new MutableLiveData<ResSearchByLocationKeyModel>();
-    public MutableLiveData<Boolean> searchByLocationKeyModelMutableLiveDataLoadError = new MutableLiveData<Boolean>();
-    public MutableLiveData<Boolean> searchByLocationKeyModelMutableLiveDataLoading = new MutableLiveData<Boolean>();
+public class LocationForecastViewModel extends AndroidViewModel {
 
     CompositeDisposable disposable = new CompositeDisposable();
     ServiceClient service = ServiceClient.getInstance();
+
+    //geopositionSearch
+    public MutableLiveData<ResGeopositionSearchModel> geopositionSearchModelMutableLiveData = new MutableLiveData<ResGeopositionSearchModel>();
+    public MutableLiveData<LoadErrorTypeModel> geopositionSearchModelMutableLiveDataLoadError = new MutableLiveData<LoadErrorTypeModel>();
+    public MutableLiveData<Boolean> geopositionSearchModelMutableLiveDataDataLoading = new MutableLiveData<Boolean>();
+
+    //dayOfDailyForecasts
+    public MutableLiveData<ResDayOfDailyForecastsModel> dayOfDailyForecastsMutableLiveData = new MutableLiveData<ResDayOfDailyForecastsModel>();
+    public MutableLiveData<LoadErrorTypeModel> dayOfDailyForecastsMutableLiveDataLoadError = new MutableLiveData<LoadErrorTypeModel>();
+    public MutableLiveData<Boolean> dayOfDailyForecastsMutableLiveDataLoading = new MutableLiveData<Boolean>();
+
+    //searchByLocationKey
+    public MutableLiveData<ResSearchByLocationKeyModel> searchByLocationKeyModelMutableLiveData = new MutableLiveData<ResSearchByLocationKeyModel>();
+    public MutableLiveData<LoadErrorTypeModel> searchByLocationKeyModelMutableLiveDataLoadError = new MutableLiveData<LoadErrorTypeModel>();
+    public MutableLiveData<Boolean> searchByLocationKeyModelMutableLiveDataLoading = new MutableLiveData<Boolean>();
+
+
+    public LocationForecastViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public void refreshGeopositionSearchModelData(String latlon) {
         fetchGeopositionSearchModelData(latlon);
@@ -60,7 +72,7 @@ public class LocationForecastViewModel extends ViewModel {
 
                                 if (objectList != null) {
                                     searchByLocationKeyModelMutableLiveData.setValue(objectList);
-                                    searchByLocationKeyModelMutableLiveDataLoadError.setValue(false);
+                                    searchByLocationKeyModelMutableLiveDataLoadError.setValue(new LoadErrorTypeModel(false,new Throwable()));
                                     searchByLocationKeyModelMutableLiveDataLoading.setValue(false);
                                 }
 
@@ -69,8 +81,9 @@ public class LocationForecastViewModel extends ViewModel {
                             @Override
                             public void onError(Throwable e) {
 
-                                searchByLocationKeyModelMutableLiveDataLoadError.setValue(true);
+                                searchByLocationKeyModelMutableLiveDataLoadError.setValue(new LoadErrorTypeModel(true,e));
                                 searchByLocationKeyModelMutableLiveDataLoading.setValue(false);
+
                                 //e.printStackTrace();
                                 //Log.e("sultan", e.getSuppressed().toString());
                                 //Log.e("sultan", e.getMessage());
@@ -94,7 +107,7 @@ public class LocationForecastViewModel extends ViewModel {
 
                                 if (objectList != null) {
                                     geopositionSearchModelMutableLiveData.setValue(objectList);
-                                    geopositionSearchModelMutableLiveDataLoadError.setValue(false);
+                                    geopositionSearchModelMutableLiveDataLoadError.setValue(new LoadErrorTypeModel(false,new Throwable()));
                                     geopositionSearchModelMutableLiveDataDataLoading.setValue(false);
                                 }
 
@@ -103,8 +116,9 @@ public class LocationForecastViewModel extends ViewModel {
                             @Override
                             public void onError(Throwable e) {
 
-                                geopositionSearchModelMutableLiveDataLoadError.setValue(true);
+                                geopositionSearchModelMutableLiveDataLoadError.setValue(new LoadErrorTypeModel(true,e));
                                 geopositionSearchModelMutableLiveDataDataLoading.setValue(false);
+
                                 //e.printStackTrace();
                                 //Log.e("sultan", e.getSuppressed().toString());
                                 //Log.e("sultan", e.getMessage());
@@ -129,7 +143,7 @@ public class LocationForecastViewModel extends ViewModel {
 
                                 if (objectList != null) {
                                     dayOfDailyForecastsMutableLiveData.setValue(objectList);
-                                    dayOfDailyForecastsMutableLiveDataLoadError.setValue(false);
+                                    dayOfDailyForecastsMutableLiveDataLoadError.setValue(new LoadErrorTypeModel(false,new Throwable()));
                                     dayOfDailyForecastsMutableLiveDataLoading.setValue(false);
                                 }
 
@@ -139,8 +153,9 @@ public class LocationForecastViewModel extends ViewModel {
                             @Override
                             public void onError(Throwable e) {
 
-                                dayOfDailyForecastsMutableLiveDataLoadError.setValue(true);
+                                dayOfDailyForecastsMutableLiveDataLoadError.setValue(new LoadErrorTypeModel(true,e));
                                 dayOfDailyForecastsMutableLiveDataLoading.setValue(false);
+
                                 //e.printStackTrace();
                                 //Log.e("sultan", e.getSuppressed().toString());
                                 //Log.e("sultan", e.getMessage());

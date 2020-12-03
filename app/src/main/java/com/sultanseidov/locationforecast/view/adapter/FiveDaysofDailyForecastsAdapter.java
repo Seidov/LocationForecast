@@ -27,7 +27,9 @@ public class FiveDaysofDailyForecastsAdapter extends RecyclerView.Adapter<FiveDa
 
     public void updateFiveDaysofDailyForecastsAdapter(List<DailyForecastModel> newDailyForecastsData){
         this.dailyForecastsData.clear();
-        newDailyForecastsData.remove(0);
+        if (newDailyForecastsData.size()>=5){
+            newDailyForecastsData.remove(0);
+        }
         this.dailyForecastsData.addAll(newDailyForecastsData);
         notifyDataSetChanged();
     }

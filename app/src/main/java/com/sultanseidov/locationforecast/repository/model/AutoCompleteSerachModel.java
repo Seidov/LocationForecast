@@ -5,22 +5,32 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AutoCompleteSerachModel implements Parcelable {
+@Entity(tableName = "autocompleteserachmodel")
+public class AutoCompleteSerachModel implements Parcelable{
 
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "key")
     @SerializedName("Key")
     @Expose
     private String key;
 
+    @ColumnInfo(name = "LocalizedName")
     @SerializedName("LocalizedName")
     @Expose
     private String localizedName;
 
+    @Embedded
     @SerializedName("country")
     @Expose
     private CountryModel country;

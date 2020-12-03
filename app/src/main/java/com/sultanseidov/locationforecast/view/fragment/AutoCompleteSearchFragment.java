@@ -9,16 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sultanseidov.locationforecast.R;
+import com.sultanseidov.locationforecast.repository.model.AutoCompleteSerachModel;
+import com.sultanseidov.locationforecast.repository.room.DatabaseClient;
 import com.sultanseidov.locationforecast.view.adapter.AutoCompleteAdapter;
 import com.sultanseidov.locationforecast.viewModel.AutocompleteSearchViewModel;
 
@@ -30,8 +34,9 @@ public class AutoCompleteSearchFragment extends Fragment {
     View view;
     SearchView srvAutocompleteSearch;
     AutocompleteSearchViewModel viewModel;
-    AutoCompleteAdapter adapter=new AutoCompleteAdapter(new ArrayList<>());
+    AutoCompleteAdapter adapter = new AutoCompleteAdapter(new ArrayList<>());
     RecyclerView recyclerView;
+    LinearLayout linearBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,14 +47,14 @@ public class AutoCompleteSearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_auto_complete_search, container, false);
+        view = inflater.inflate(R.layout.fragment_auto_complete_search, container, false);
 
         initUIComponent();
         initLastSearchesLoacationRecyclerView();
 
         viewModel = ViewModelProviders.of(getActivity()).get(AutocompleteSearchViewModel.class);
 
-        //getLastQuery();
+        getLastQuery();
 
         return view;
     }
@@ -95,17 +100,23 @@ public class AutoCompleteSearchFragment extends Fragment {
             }
         });
 
+        linearBack.setOnClickListener(view -> {
+            Navigation.findNavController(view).navigate(R.id.action_autoCompleteSearchFragment_pop);
+        });
+
     }
+
 
     private void initLastSearchesLoacationRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
     }
-    private void initUIComponent() {
-        srvAutocompleteSearch=view.findViewById(R.id.srvAutocompleteSearch);
-        recyclerView=view.findViewById(R.id.rvAutocompleteSearch);
-    }
 
+    private void initUIComponent() {
+        srvAutocompleteSearch = view.findViewById(R.id.srvAutocompleteSearch);
+        recyclerView = view.findViewById(R.id.rvAutocompleteSearch);
+        linearBack = view.findViewById(R.id.linearBack);
+    }
 
     private boolean isNetworkConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -124,32 +135,27 @@ public class AutoCompleteSearchFragment extends Fragment {
 
     private void observerAutocompleteSearchViewModel() {
 
-        viewModel.resAutocompleteSearchModelMutableLiveData.observe(this,resAutocompleteSearchModel -> {
+        viewModel.resAutocompleteSearchModelMutableLiveData.observe(this, resAutocompleteSearchModel -> {
 
-            if (resAutocompleteSearchModel!=null){
+            if (resAutocompleteSearchModel != null) {
                 adapter.updateAutoCompleteSearchData(resAutocompleteSearchModel);
-                //setLastQuery(resAutocompleteSearchModel.get(0));
-
             }
 
         });
 
-        viewModel.resAutocompleteSearchModelMutableLiveDataLoadError.observe(this,isError ->{
+        viewModel.resAutocompleteSearchModelMutableLiveDataLoadError.observe(this, isError -> {
             if (isError != null) {
 
             }
         });
 
-        viewModel.resAutocompleteSearchModelMutableLiveDataLoading.observe(this,isLoading ->{
+        viewModel.resAutocompleteSearchModelMutableLiveDataLoading.observe(this, isLoading -> {
 
-        } );
-
-
+        });
 
 
     }
 
-    /*
     private void setLastQuery(AutoCompleteSerachModel resAutocompleteSearchModel) {
         class SaveTask extends AsyncTask<Void, Void, Void> {
 
@@ -158,7 +164,7 @@ public class AutoCompleteSearchFragment extends Fragment {
 
 
                 //adding to database
-                DatabaseClient.getInstance(getApplicationContext()).getAppDatabase()
+                DatabaseClient.getInstance(getContext()).getAppDatabase()
                         .autoCompleteSearchDao()
                         .insert(resAutocompleteSearchModel);
                 return null;
@@ -167,9 +173,9 @@ public class AutoCompleteSearchFragment extends Fragment {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                finish();
+                //finish();
                 //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -183,7 +189,7 @@ public class AutoCompleteSearchFragment extends Fragment {
             @Override
             protected List<AutoCompleteSerachModel> doInBackground(Void... voids) {
                 List<AutoCompleteSerachModel> taskList = DatabaseClient
-                        .getInstance(getApplicationContext())
+                        .getInstance(getContext())
                         .getAppDatabase()
                         .autoCompleteSearchDao()
                         .getAllautoCompleteSerachModel();
@@ -201,8 +207,6 @@ public class AutoCompleteSearchFragment extends Fragment {
         gt.execute();
     }
 
-
-     */
     private void showInputMethod(View view) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {

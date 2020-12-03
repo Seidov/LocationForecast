@@ -22,10 +22,19 @@
         <action
             android:id="@+id/action_autoCompleteSearchFragment_to_detailForecastFragment"
             app:destination="@id/detailForecastFragment" />
+        <action
+            android:id="@+id/action_autoCompleteSearchFragment_pop"
+            app:popUpTo="@id/autoCompleteSearchFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/detailForecastFragment"
         android:name="com.sultanseidov.locationforecast.view.fragment.DetailForecastFragment"
         android:label="fragment_detail_forecast"
-        tools:layout="@layout/fragment_detail_forecast" />
+        tools:layout="@layout/fragment_detail_forecast" >
+        <action
+            android:id="@+id/action_detailForecastFragment_pop"
+            app:popUpTo="@id/detailForecastFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -2,8 +2,12 @@ package com.sultanseidov.locationforecast.Util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
+import android.widget.Toast;
 
 import com.sultanseidov.locationforecast.R;
 
@@ -46,7 +50,6 @@ public class Utils {
         return isPermitGrant;
     }
 
-
     public static String getDayNameByEpochDate(int l) {
         Date date = new Date(Long.valueOf(l) * 1000);
         DateFormat format = new SimpleDateFormat("EEEE");
@@ -82,7 +85,6 @@ public class Utils {
         return isDay;
 
     }
-
 
     public static String getCelsiusByFahrenheit(Integer minFahrenheit, Integer maxFahrenheit) {
         Integer fahrenheit = (minFahrenheit + maxFahrenheit) / 2;
@@ -268,6 +270,25 @@ public class Utils {
             imageResource = R.drawable.night;
         }
         return imageResource;
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        // Get Connectivity Manager class object from Systems Service
+        ConnectivityManager cm = (ConnectivityManager)  context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get Network Info from connectivity Manager
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void showToastMessage(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
 

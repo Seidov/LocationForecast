@@ -45,17 +45,13 @@ public class AutoCompleteAdapter  extends RecyclerView.Adapter<AutoCompleteAdapt
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.cityName.setText(autoCompleteSerachModelList.get(position).getLocalizedName());
-        //holder.countryName.setText(autoCompleteSerachModelList.get(position).getCountry().getLocalizedName());
         holder.itemView.setOnClickListener(view -> {
             Toast.makeText(holder.itemView.getContext(), ""+position, Toast.LENGTH_SHORT).show();
 
-            //Intent intent = new Intent(holder.itemView.getContext(), DetailForecastActivity.class);
-            //intent.putExtra("AutoCompleteSearch",autoCompleteSerachModelList.get(position));
-            //holder.itemView.getContext().startActivity(intent);
-
-
             Bundle bundle=new Bundle();
             bundle.putString("cityKey",autoCompleteSerachModelList.get(position).getKey());
+            bundle.putParcelable("autoCompleteSerachModel",autoCompleteSerachModelList.get(position));
+
             Navigation.findNavController(view).navigate(R.id.action_autoCompleteSearchFragment_to_detailForecastFragment,bundle);
 
         });

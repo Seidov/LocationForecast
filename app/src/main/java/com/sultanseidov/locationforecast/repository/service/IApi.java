@@ -25,7 +25,7 @@ public interface IApi {
                                                                 @Query("q") String q,
                                                                 @Query("language")String language);
 
-    //1 Day of Daily Forecasts
+    //Daily Forecasts
     @GET()
     Single<ResDayOfDailyForecastsModel> getDayOfDailyForecasts(@Url String cityKey,
                                                                @Query("apikey") String apikey,
